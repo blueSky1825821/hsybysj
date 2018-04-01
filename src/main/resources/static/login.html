@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0" />
+    <title>管理系统</title>
+    <link rel="stylesheet" href="docs/dist/css/login.css"/>
+    <link href="docs/dist/css/style.css" rel='stylesheet' type='text/css' />
+    <script src="docs/dist/js/common.js"></script>
+    <link rel="stylesheet" href="docs/dist/css/bootstrap.css"/>
+    <script src="docs/dist/js/jquery.min.js"></script>
+    <script src="docs/dist/js/bootstrap.min.js"></script>
+
+
+</head>
+<body id="login">
+  <div class="login-logo">
+    	<h1><small>管理系统</small></h1>
+  </div>
+  <h2 class="form-heading">登录</h2>
+  <div class="app-cam">
+	  <form method="post" action="/login">
+		<input type="text" class="text" name="name" value="用户名" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '用户名';}"/>
+		<input type="password" name="password" value="请输入密码" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = '请输入密码';}"/>
+		<div class="submit"><input type="submit" value="登录"/></div>
+		<ul class="new">
+			<li class="new_left"><p><a href="#">忘记密码?</a></p></li>
+			<li class="new_right"><p class="sign">现在?<a href="register.html">注册</a></p></li>
+			<div class="clearfix"></div>
+		</ul>
+	</form>
+  </div>
+</body>
+</html>
