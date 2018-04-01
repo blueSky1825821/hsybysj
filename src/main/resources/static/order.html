@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>管理系统</title>
+    <link rel="stylesheet" href="css/manage.css"/>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css"/>
+    <script src="js/common.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!--<script src="jquery/jquery-3.3.1.min.js"></script>-->
+    <script>
+        function loadAllData() {
+            var tbody = window.document.getElementById("table_body");
+            $.ajax({
+                type: "POST",  //提交方式
+                url: "http://localhost:8080/order/test",//路径
+                dataType: "json",
+                async: false,
+                success: function (result) {//返回数据根据结果进行相应的处理
+                    console.log(result);
+                    var str = "";
+                    var json = jQuery.parseJSON(JSON.stringify(result));
+                    $.each(json, function (index, item) {
+                        str += "<tr>" +
+                            "<td>" + item.name + "</td>" + "<td>" + item.password + "</td>" + "</tr>";
+                    });
+                    console.log(str);
+                    tbody.innerHTML = str;
+                }
+            })
+        }
+    </script>
+
+    <script>
+        $(loadAllData);
+    </script>
+
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+<div class="navbar navbar-fixed-top navbar-nav navbar-inverse" style="background-color:#3C8DBC">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="#" style="color: white;">后台管理系统</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right" style="margin-right: 50px">
+            <li><a id="user" href="#" style="color: white; size: 22px">欢迎登陆</a></li>
+            <li><img src="/img/123.jpg" class="img-circle" style="width: 50px;height: 50px; padding:5px"/></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color: white;">账号管理<span
+                        class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li class="dropdown-header" th:text="${username}" style="color: #000;"></li>
+                    <li class="divider"></li>
+                    <li><a href="#">更改密码</a></li>
+                    <li><a href="#" onclick="putHeadPic()">更换头像</a></li>
+                    <li><a href="#" onclick="getCancel()">退出登录</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="container" style="height: 100%;width: 100%;float:left;">
+    <div class="row clearfix">
+        <div style="width: auto;margin-left: 200px;height:100%;background-color:#FAFAFA;" id="api_manage_content">
+            <div class="tabbable" id="tabs-328078" style="margin-top: 70px;margin-left: 20px; margin-right: 20px">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#cps_subscription_api" data-toggle="tab"><span id="lab_1"></span></a>
+                    </li>
+                    <li>
+                        <a href="#login_register_api" data-toggle="tab"><span id="lab_2"></span></a>
+                    </li>
+                    <li>
+                        <a href="#file_upload_api" data-toggle="tab"><span id="lab_3"></span></a>
+                    </li>
+                    <li>
+                        <a href="#picture_api" data-toggle="tab"><span id="lab_4"></span></a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="cps_subscription_api">
+                        <h3 id="api_detail_name1">
+                        </h3>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    API概述
+                                </h3>
+                            </div>
+                            <div class="panel-body" id="api_des1">
+
+                            </div>
+                        </div>
+                        <div class="panel panel-info" style="margin-top: 10px">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    API域名和端口
+                                </h3>
+                            </div>
+                            <div class="panel-body" id="api_domain1">
+                            </div>
+                        </div>
+                        <table class="table table-hover table-striped table-bordered" style="display: none"
+                               id="generatedTable">
+                            <thead>
+                            <tr>
+                                <th>
+                                    编号
+                                </th>
+                                <th>
+                                    API名字
+                                </th>
+                                <th>
+                                    API功能
+                                </th>
+                                <th>
+                                    API
+                                </th>
+                                <th>
+                                    请求方法
+                                </th>
+                                <th>
+                                    详情
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="table_body">
+
+                            <!--<tr id="cloneTr">-->
+                            <!--<td>-->
+                            <!--</td>-->
+                            <!--<td>-->
+                            <!--</td>-->
+                            <!--<td>-->
+                            <!--</td>-->
+                            <!--<td>-->
+                            <!--</td>-->
+                            <!--<td>-->
+                            <!--</td>-->
+                            <!--<td>-->
+                            <!--</td>-->
+                            <!--</tr>-->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--<div class="tab-pane" id="login_register_api">-->
+                        <!--<h3 id="api_detail_name2">-->
+                        <!--</h3>-->
+
+                        <!--<div class="panel panel-primary">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h3 class="panel-title">-->
+                                    <!--API概述-->
+                                <!--</h3>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body" id="api_des2">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="panel panel-info" style="margin-top: 10px">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h3 class="panel-title">-->
+                                    <!--API域名和端口-->
+                                <!--</h3>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body" id="api_domain2">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="tab-pane" id="file_upload_api">-->
+                        <!--<h3 id="api_detail_name3">-->
+                        <!--</h3>-->
+
+                        <!--<div class="panel panel-primary">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h3 class="panel-title">-->
+                                    <!--API概述-->
+                                <!--</h3>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body" id="api_des3">-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="panel panel-info" style="margin-top: 10px">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h3 class="panel-title">-->
+                                    <!--API域名和端口-->
+                                <!--</h3>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body" id="api_domain3">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<table class="table table-hover table-striped table-bordered" style="display: none"-->
+                               <!--id="generatedFileTable">-->
+                            <!--<thead>-->
+                            <!--<tr>-->
+                                <!--<th>-->
+                                    <!--编号-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                    <!--API名字-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                    <!--API功能-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                    <!--API-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                    <!--请求方法-->
+                                <!--</th>-->
+                                <!--<th>-->
+                                    <!--详情-->
+                                <!--</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody id="table_body_file">-->
+                            <!--<tr id="cloneTr_file">-->
+                                <!--<td>-->
+                                <!--</td>-->
+                                <!--<td>-->
+                                <!--</td>-->
+                                <!--<td>-->
+                                <!--</td>-->
+                                <!--<td>-->
+                                <!--</td>-->
+                                <!--<td>-->
+                                <!--</td>-->
+                                <!--<td>-->
+                                <!--</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                    <!--</div>-->
+                    <!--<div class="tab-pane" id="picture_api">-->
+                        <!--<h3 id="api_detail_name4">-->
+                        <!--</h3>-->
+
+                        <!--<div class="panel panel-primary">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h3 class="panel-title">-->
+                                    <!--API概述-->
+                                <!--</h3>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body" id="api_des4">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="panel panel-info" style="margin-top: 10px">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h3 class="panel-title">-->
+                                    <!--API域名和端口-->
+                                <!--</h3>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body" id="api_domain4">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+
+        <div style="width: auto;margin-left: 200px;height:100%;background-color:#FAFAFA;display: none"
+             id="api_run_content">
+            <div class="panel-group" id="panel_api_run" style="margin-top: 70px;margin-left: 20px;margin-right: 20px;">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel_api_run"
+                           href="#panel_api_cps">CPS订阅端API运行情况</a>
+                    </div>
+                    <div id="panel_api_cps" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item " style="background-color: #dff0d8;">HOME</a>
+                                <a class="list-group-item "> <span class="label label-danger"
+                                                                   style=" float:right;">运行中</span> CPS订阅端运行情况</a>
+                                <a class="list-group-item "> <span class="badge" onclick="getRunDetail(1)">查看详情</span>
+                                    订阅信息</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-info" style="margin-top: 30px">
+                    <div class="panel-heading">
+                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel_api_run"
+                           href="#panel_api_login">登录注册API运行情况</a>
+                    </div>
+                    <div id="panel_api_login" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item " style="background-color: #d9edf7;">HOME</a>
+                                <a class="list-group-item "> <span class="label label-danger"
+                                                                   style=" float:right;">运行中</span> 登录注册运行情况</a>
+                                <a class="list-group-item "> <span class="badge">查看详情</span>登录信息</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success" style="margin-top: 30px">
+                    <div class="panel-heading">
+                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel_api_run"
+                           href="#panel_api_file">文件上传下载运行情况</a>
+                    </div>
+                    <div id="panel_api_file" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item " style="background-color: #d9edf7;">HOME</a>
+                                <a class="list-group-item "> <span class="label label-danger"
+                                                                   style=" float:right;">运行中</span> 文件上传下载运行情况</a>
+                                <a class="list-group-item "> <span class="badge" onclick="getRunDetail(3)">查看详情</span>文件信息</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

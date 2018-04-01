@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>系统后台</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="docs/assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]>
+    <script src="docs/assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="docs/assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/order1.html">系统后台首页</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/invoice.html">发票管理界面</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form id="queryByParams" class="navbar-form navbar-right">
+                <input type="text" id="client" class="form-control" placeholder="公司...">
+                <input type="text" id="orderId" class="form-control" placeholder="订单号...">
+                <input type="text" id="documentNo" class="form-control" placeholder="文件编号...">
+                <input type="button" value="查询" class="btn btn-default" onclick="queryByParams()">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="/order/query"><h3>订单详情</h3><span class="sr-only">(current)</span></a></li>
+                <li><a href="/order/save"><h3>订单增加</h3></a></li>
+            </ul>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">订单详情</h1>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>订单号</th>
+                        <th>公司</th>
+                        <th>部门</th>
+                        <th>文件编号</th>
+                        <th>记录描述</th>
+                        <th>自助服务</th>
+                        <th>订单参考</th>
+                        <th>下单时间</th>
+                        <th>答应交货时间</th>
+                        <th>合伙人</th>
+                        <th>发票人</th>
+                        <th>合伙人地址</th>
+                        <th>合伙人发票</th>
+                        <th>内容</th>
+                        <th>发票内容</th>
+                        <th>定义交货时间</th>
+                        <th>优先级</th>
+                        <th>仓库</th>
+                        <th>拖放货件</th>
+                        <th>投递方式</th>
+                        <th>运输方式</th>
+                        <th>运费</th>
+                        <th>本金</th>
+                        <th>货币</th>
+                        <th>货币类型</th>
+                        <th>打印</th>
+                        <th>费用类型</th>
+                        <th>费用金额</th>
+                        <th>付款规则</th>
+                        <th>付款条款</th>
+                        <th>工程</th>
+                        <th>活动</th>
+                        <th>营销计划</th>
+                        <th>中间人</th>
+                        <th>总数</th>
+                        <th>总计</th>
+                        <th>订单类型</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="dist/js/bootstrap.min.js"></script>
+<!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+<script src="docs/assets/js/vendor/holder.min.js"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+
+<script>
+    function loadAllData() {
+        var tbody = window.document.getElementById("table_body");
+        $.ajax({
+            type: "POST",  //提交方式
+            url: "/order/query",//路径
+            dataType: "json",
+            async: false,
+            success: function (result) {//返回数据根据结果进行相应的处理
+                var str = "";
+                var json = jQuery.parseJSON(JSON.stringify(result));
+                $.each(json, function (index, item) {
+                    str = str.concat("<tr>",
+                        "<td>", item.orderId, "</td>"
+                        , "<td>", item.client, "</td>"
+                        , "<td>", item.organization, "</td>"
+                        , "<td>", item.documentNo, "</td>"
+                        , "<td>", item.description, "</td>"
+                        , "<td>", item.selfService, "</td>"
+                        , "<td>", item.OrderReference, "</td>"
+                        , "<td>", item.dateOrdered, "</td>"
+                        , "<td>", item.datePromised, "</td>"
+                        , "<td>", item.businessPartner, "</td>"
+                        , "<td>", item.invoicePartner, "</td>"
+                        , "<td>", item.partnerLocation, "</td>"
+                        , "<td>", item.invoiceLocation, "</td>"
+                        , "<td>", item.userOrContact, "</td>"
+                        , "<td>", item.invoiceContact, "</td>"
+                        , "<td>", item.deliverRule, "</td>"
+                        , "<td>", item.priority, "</td>"
+                        , "<td>", item.warehouse, "</td>"
+                        , "<td>", item.dropShipment, "</td>"
+                        , "<td>", item.deliveryVia, "</td>"
+                        , "<td>", item.shipper, "</td>"
+                        , "<td>", item.freightCostRule, "</td>"
+                        , "<td>", item.freightAmt, "</td>"
+                        , "<td>", item.priceList, "</td>"
+                        , "<td>", item.currency, "</td>"
+                        , "<td>", item.currencyType, "</td>"
+                        , "<td>", item.discountPrinted, "</td>"
+                        , "<td>", item.charge, "</td>"
+                        , "<td>", item.chargeAmount, "</td>"
+                        , "<td>", item.paymentRule, "</td>"
+                        , "<td>", item.project, "</td>"
+                        , "<td>", item.activity, "</td>"
+                        , "<td>", item.campaign, "</td>"
+                        , "<td>", item.trxOrganization, "</td>"
+                        , "<td>", item.totalLines, "</td>"
+                        , "<td>", item.grandTotal, "</td>"
+                        , "<td>", item.orderType, "</td>"
+                        , "<td>", "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" onclick=\"return get_edit_info(item.orderId)\" data-target=\"#addUserModal\">编辑</button>",
+                        "&nbsp;|&nbsp;", "<button type=\"button\" class=\"btn btn-danger\" onclick=\"return delete_info({item.orderId})\">删除</button>", "</td>"
+                        , "</tr>"
+                    )
+                });
+                tbody.innerHTML = str;
+            }
+        })
+    }
+</script>
+
+<script language="javascript">
+    function queryByParams() {
+        var client = document.getElementById("client").value;
+        var orderId = document.getElementById("orderId").value;
+        var documentNo = document.getElementById("documentNo").value;
+        $.ajax({
+            type: "POST",  //提交方式
+            url: "/order/query",//路径
+            data: {client: client, orderId: orderId, documentNo: documentNo},
+            dataType: "json",
+            async: false,
+            success: function (result) {
+                var tbody = window.document.getElementById("table_body");
+                var str = "";
+                var json = jQuery.parseJSON(JSON.stringify(result));
+                $.each(json, function (index, item) {
+                    str = str.concat("<tr>",
+                        "<td>", item.orderId, "</td>"
+                        , "<td>", item.client, "</td>"
+                        , "<td>", item.organization, "</td>"
+                        , "<td>", item.documentNo, "</td>"
+                        , "<td>", item.description, "</td>"
+                        , "<td>", item.selfService, "</td>"
+                        , "<td>", item.OrderReference, "</td>"
+                        , "<td>", item.dateOrdered, "</td>"
+                        , "<td>", item.datePromised, "</td>"
+                        , "<td>", item.businessPartner, "</td>"
+                        , "<td>", item.invoicePartner, "</td>"
+                        , "<td>", item.partnerLocation, "</td>"
+                        , "<td>", item.invoiceLocation, "</td>"
+                        , "<td>", item.userOrContact, "</td>"
+                        , "<td>", item.invoiceContact, "</td>"
+                        , "<td>", item.deliverRule, "</td>"
+                        , "<td>", item.priority, "</td>"
+                        , "<td>", item.warehouse, "</td>"
+                        , "<td>", item.dropShipment, "</td>"
+                        , "<td>", item.deliveryVia, "</td>"
+                        , "<td>", item.shipper, "</td>"
+                        , "<td>", item.freightCostRule, "</td>"
+                        , "<td>", item.freightAmt, "</td>"
+                        , "<td>", item.priceList, "</td>"
+                        , "<td>", item.currency, "</td>"
+                        , "<td>", item.currencyType, "</td>"
+                        , "<td>", item.discountPrinted, "</td>"
+                        , "<td>", item.charge, "</td>"
+                        , "<td>", item.chargeAmount, "</td>"
+                        , "<td>", item.paymentRule, "</td>"
+                        , "<td>", item.project, "</td>"
+                        , "<td>", item.activity, "</td>"
+                        , "<td>", item.campaign, "</td>"
+                        , "<td>", item.trxOrganization, "</td>"
+                        , "<td>", item.totalLines, "</td>"
+                        , "<td>", item.grandTotal, "</td>"
+                        , "<td>", item.orderType, "</td>"
+                        , "<td>", "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" onclick=\"return get_edit_info(1)\" data-target=\"#addUserModal\">编辑</button>",
+                        "&nbsp;&nbsp;", "<button type=\"button\" class=\"btn btn-danger\" onclick=\"return delete_info(1)\">删除</button>", "</td>"
+                        , "</tr>"
+                    )
+                });
+                tbody.innerHTML = str;
+            }
+        })
+
+    }
+</script>
+
+<script>
+    $(loadAllData);
+</script>
+
+<script>
+    // 提交表单
+    function delete_info(id) {
+        if (!id) {
+            alert('Error！');
+            return false;
+        }
+        // var form_data = new Array();
+
+        $.ajax(
+            {
+                url: "action/user_action.php",
+                data: {"id": id, "act": "del"},
+                type: "post",
+                beforeSend: function () {
+                    $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                    return true;
+                },
+                success: function (data) {
+                    if (data > 0) {
+                        alert('操作成功');
+                        $("#tip").html("<span style='color:blueviolet'>恭喜，删除成功！</span>");
+
+                        // document.location.href='world_system_notice.php'
+                        location.reload();
+                    }
+                    else {
+                        $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                        alert('操作失败');
+                    }
+                },
+                error: function () {
+                    alert('请求出错');
+                },
+                complete: function () {
+                    // $('#tips').hide();
+                }
+            });
+
+        return false;
+    }
+
+    // 编辑表单
+    function get_edit_info(orderId) {
+        if (!orderId) {
+            alert('Error！');
+            return false;
+        }
+        // var form_data = new Array();
+
+        $.ajax(
+            {
+                url: "order/query",
+                data: {"orderId": orderId},
+                dataType: "json",
+                type: "post",
+                async: false,
+                beforeSend: function () {
+                    // $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                    return true;
+                },
+                success: function (result) {
+                    if (result) {
+
+                        // 解析json数据
+                        var data_obj = eval("(" + result + ")");
+                        // 赋值
+                        $('#orderId').attr("readonly", "readonly");
+                        $("#user_id").val(data_obj.user_id);
+
+                        $("#name").val(data_obj.name);
+                        $("#address").val(data_obj.address);
+                        $("#remark").val(data_obj.remark);
+                        $("#act").val("edit")
+
+                        // 将input元素设置为readonly
+                        // location.reload();
+                    }
+                    else {
+                        $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                        //  alert('操作失败');
+                    }
+                },
+                error: function () {
+                    alert('请求出错');
+                },
+                complete: function () {
+                    // $('#tips').hide();
+                }
+            });
+
+        return false;
+    }
+
+    // 提交表单
+    function check_form() {
+        var user_id = $.trim($('#user_id').val());
+        var act = $.trim($('#act').val());
+
+        if (!user_id) {
+            alert('用户ID不能为空！');
+            return false;
+        }
+        var form_data = $('#form_data').serialize();
+
+        // 异步提交数据到action/add_action.php页面
+        $.ajax(
+            {
+                url: "action/user_action.php",
+                data: {"form_data": form_data, "act": act},
+                type: "post",
+                beforeSend: function () {
+                    $("#tip").html("<span style='color:blue'>正在处理...</span>");
+                    return true;
+                },
+                success: function (data) {
+                    if (data > 0) {
+
+                        var msg = "添加";
+                        if (act == "edit") msg = "编辑";
+                        $("#tip").html("<span style='color:blueviolet'>恭喜，" + msg + "成功！</span>");
+                        // document.location.href='system_notice.php'
+                        alert(msg + "OK！");
+                        location.reload();
+                    }
+                    else {
+                        $("#tip").html("<span style='color:red'>失败，请重试</span>");
+                        alert('操作失败');
+                    }
+                },
+                error: function () {
+                    alert('请求出错');
+                },
+                complete: function () {
+                    $('#acting_tips').hide();
+                }
+            });
+
+        return false;
+    }
+
+    $(function () {
+        $('#addUserModal').on('hide.bs.modal', function () {
+            // 关闭时清空edit状态为add
+            $("#act").val("add");
+            location.reload();
+        })
+    });
+</script>
+</body>
+</html>

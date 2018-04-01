@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.adempiere.bysj.mapper.SalesOrderRepository">
+    <resultMap id="salesOrderDo" type="com.adempiere.bysj.domain.SalesOrderDO">
+        <id column="c_order_id" property="orderId"/>
+        <id column="DocumentNo" property="documentNo"/>
+        <result column="AD_Client_ID" property="client"/>
+        <result column="AD_Org_ID" property="organization"/>
+        <result column="POReference" property="OrderReference"/>
+        <result column="description" property="description"/>
+        <!--<result column="C_DocTypeTarget_ID" property="targetDocumentType"/>-->
+        <result column="IsSelfService" property="selfService"/>
+        <result column="DateOrdered" property="dateOrdered" jdbcType="TIMESTAMP"/>
+        <result column="DatePromised" property="datePromised" jdbcType="TIMESTAMP"/>
+        <result column="C_BPartner_ID" property="businessPartner"/>
+        <result column="Bill_BPartner_ID" property="invoicePartner"/>
+        <result column="C_BPartner_Location_ID" property="partnerLocation"/>
+        <result column="Bill_Location_ID" property="invoiceLocation"/>
+        <result column="AD_User_ID" property="userOrContact"/>
+        <result column="Bill_User_ID" property="invoiceContact"/>
+        <result column="DeliveryRule" property="deliverRule"/>
+        <result column="PriorityRule" property="priority"/>
+        <result column="M_Warehouse_ID" property="warehouse"/>
+        <result column="IsDropShip" property="dropShipment"/>
+        <result column="DeliveryViaRule" property="deliveryVia"/>
+        <result column="M_Shipper_ID" property="shipper"/>
+        <result column="FreightCostRule" property="freightCostRule"/>
+        <result column="FreightAmt" property="FreightAmt"/>
+        <!--<result column="invoiceRule" property="invoiceRule"/>-->
+        <result column="M_PriceList_ID" property="priceList"/>
+        <result column="C_Currency_ID" property="currency"/>
+        <result column="C_ConversionType_ID" property="currencyType"/>
+        <!--<result column="SalesRep_ID" property="salesRepresentative"/>-->
+        <result column="IsDiscountPrinted" property="discountPrinted"/>
+        <result column="C_Charge_ID" property="charge"/>
+        <result column="ChargeAmt" property="chargeAmount"/>
+        <result column="paymentRule" property="paymentRule"/>
+        <result column="C_PaymentTerm_ID" property="paymentTerm"/>
+        <result column="C_Project_ID" property="project"/>
+        <result column="C_Activity_ID" property="activity"/>
+        <result column="C_Campaign_ID" property="campaign"/>
+        <result column="AD_OrgTrx_ID" property="trxOrganization"/>
+        <!--<result column="userList1" property="userList1"/>-->
+        <!--<result column="userList2" property="userList2"/>-->
+        <result column="TotalLines" property="totalLines"/>
+        <result column="GrandTotal" property="grandTotal"/>
+        <!--<result column="DocStatus" property="documentStatus"/>-->
+        <!--<result column="C_DocType_ID" property="documentType"/>-->
+        <!--<result column="copyLines" property="copyLines"/>-->
+        <!--<result column="processOrder" property="processOrder"/>-->
+        <!--<result column="posted" property="posted"/>-->
+        <result column="OrderType" property="orderType"/>
+    </resultMap>
+
+    <insert id="save">
+        insert into "adempiere".c_order (c_order_id, AD_Client_ID, AD_Org_ID, DocumentNo, POReference, description, IsSelfService, DateOrdered,DatePromised,
+        C_BPartner_ID, Bill_BPartner_ID, C_BPartner_Location_ID, Bill_Location_ID, AD_User_ID,
+        Bill_User_ID, DeliveryRule, PriorityRule, M_Warehouse_ID, IsDropShip, DeliveryViaRule, M_Shipper_ID,
+        FreightCostRule, FreightAmt, M_PriceList_ID, C_Currency_ID, C_ConversionType_ID, IsDiscountPrinted, C_Charge_ID,
+        ChargeAmt, paymentRule, C_PaymentTerm_ID, C_Project_ID, C_Activity_ID, C_Campaign_ID, AD_OrgTrx_ID, TotalLines,
+        GrandTotal, OrderType)
+        values (#{orderId},#{client},#{organization},#{documentNo},#{OrderReference},#{description},#{selfService},#{dateOrdered},#{datePromised},
+        #{businessPartner},#{invoicePartner},#{partnerLocation},#{invoiceLocation},#{userOrContact},
+        #{invoiceContact},#{deliverRule},#{priority},#{warehouse},#{dropShipment},#{deliveryVia},#{shipper},
+        #{freightCostRule},#{FreightAmt},#{priceList},#{currency},#{currencyType},#{discountPrinted},#{charge},
+        #{chargeAmount},#{paymentRule},#{paymentTerm},#{project},#{activity},#{campaign},#{trxOrganization},#{totalLines},
+        #{grandTotal},#{orderType})
+    </insert>
+
+    <!--可被重复使用的代码块-->
+    <!--<sql id="baseColumn">-->
+    <!--id,-->
+    <!--name,-->
+    <!--age-->
+    <!--</sql>-->
+
+    <select id="query" resultType="com.adempiere.bysj.domain.SalesOrderDO" parameterType="String">
+        SELECT
+        <!--<include refid="baseColumn"/>-->
+        c_order_id, AD_Client_ID, AD_Org_ID, DocumentNo, POReference, description, IsSelfService, DateOrdered,
+        DatePromised, C_BPartner_ID, Bill_BPartner_ID, C_BPartner_Location_ID, Bill_Location_ID, AD_User_ID,
+        Bill_User_ID, DeliveryRule, PriorityRule, M_Warehouse_ID, IsDropShip, DeliveryViaRule, M_Shipper_ID,
+        FreightCostRule, FreightAmt, M_PriceList_ID, C_Currency_ID, C_ConversionType_ID, IsDiscountPrinted, C_Charge_ID,
+        ChargeAmt, paymentRule, C_PaymentTerm_ID, C_Project_ID, C_Activity_ID, C_Campaign_ID, AD_OrgTrx_ID, TotalLines,
+        GrandTotal, OrderType
+        FROM
+        "adempiere".c_order
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="documentNo != null and documentNo != ''">
+                AND DocumentNo = #{documentNo, jdbcType = VARCHAR}
+            </if>
+            <if test="orderId != null and orderId != ''">
+                AND c_order_id = #{orderId, jdbcType = INTEGER}
+            </if>
+            <if test="client != null and client != ''">
+                AND AD_Client_ID = #{client, jdbcType = VARCHAR}
+            </if>
+        </trim>
+    </select>
+
+
+    <update id="update">
+        update "adempiere".c_order set
+        c_order_ido = #{orderId},
+        AD_User_ID = #{userOrContact},
+        M_PriceList_ID = #{priceList},
+        IsDiscountPrinted = #{discountPrinted},
+        TotalLines = #{totalLines}
+        GrandTotal = #{grandTotal}
+        where c_order_id = #{orderId}
+    </update>
+
+    <delete id="delete">
+        delete from "adempiere".c_order where c_order_id = #{orderId}
+    </delete>
+
+    <!--    <insert id="saveUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id"
+                parameterType="com.wangmin.myspringboot.thymeleaf.domain.User">
+            INSERT INTO "public".user
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="name != null">
+                    name,
+                </if>
+                <if test="age != null">
+                    age,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="name != null">
+                    #{name},
+                </if>
+                <if test="age != null">
+                    #{age},
+                </if>
+            </trim>
+        </insert>
+
+        <update id="updateUser">
+            UPDATE user
+            <set>
+                <if test="name != null">
+                    name = #{name, jdbcType=VARCHAR},
+                </if>
+                <if test="age != null">
+                    age = #{age, jdbcType=INTEGER},
+                </if>
+            </set>
+            WHERE id = #{id}
+        </update>
+
+        <delete id="deleteUser">
+            DELETE FROM user
+            WHERE id = #{id}
+        </delete>
+
+        <select id="listUser" resultMap="user">
+            SELECT
+                id,
+                name,
+                age
+            FROM user
+        </select>-->
+
+</mapper>

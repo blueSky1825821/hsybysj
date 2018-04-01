@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.adempiere.bysj.mapper.InvoiceRepository">
+    <resultMap id="Do" type="com.adempiere.bysj.domain.InvoiceDO">
+        <id column="c_order_id" property="orderId"/>
+        <result column="AD_Client_ID" property="client"/>
+        <result column="AD_Org_ID" property="organization"/>
+        <result column="DateOrdered" property="orderDate" jdbcType="TIMESTAMP"/>
+        <result column="DocumentNo" property="documentNo"/>
+        <result column="POReference" property="OrderReference"/>
+        <result column="description" property="description"/>
+        <result column="IsSelfService" property="selfService"/>
+        <result column="DateInvoiced" property="dateInvoiced" jdbcType="TIMESTAMP"/>
+        <result column="DateAcct" property="dateAccount" jdbcType="TIMESTAMP"/>
+        <result column="C_BPartner_ID" property="businessPartner"/>
+        <result column="C_BPartner_Location_ID" property="partnerLocation"/>
+        <result column="AD_User_ID" property="userOrContact"/>
+        <result column="M_PriceList_ID" property="priceList"/>
+        <result column="C_Currency_ID" property="currency"/>
+        <result column="C_ConversionType_ID" property="currencyType"/>
+        <result column="IsDiscountPrinted" property="discountPrinted"/>
+        <result column="C_Charge_ID" property="charge"/>
+        <result column="ChargeAmt" property="chargeAmount"/>
+        <result column="C_Project_ID" property="project"/>
+        <result column="C_Activity_ID" property="activity"/>
+        <result column="C_Campaign_ID" property="campaign"/>
+        <result column="AD_OrgTrx_ID" property="trxOrganization"/>
+        <result column="TotalLines" property="totalLines"/>
+        <result column="GrandTotal" property="grandTotal"/>
+        <result column="C_DocType_ID" property="documentType"/>
+        <result column="IsPayScheduleValid" property="payScheduleValid"/>
+        <result column="IsInDispute" property="isDispute"/>
+        <result column="DocAction" property="processInvoice"/>
+        <result column="Posted" property="posted"/>
+        <result column="paid" property="paid"/>
+    </resultMap>
+
+    <!--可被重复使用的代码块-->
+    <!--<sql id="baseColumn">-->
+    <!--id,-->
+    <!--name,-->
+    <!--age-->
+    <!--</sql>-->
+
+    <select id="query" resultType="com.adempiere.bysj.domain.InvoiceDO">
+        SELECT
+        <!--<include refid="baseColumn"/>-->
+        c_invoice_id, ad_client_id, ad_org_id, isactive, created, createdby, updated, updatedby, issotrx, documentno,
+        docstatus, docaction, processing, processed, posted, c_doctype_id, c_doctypetarget_id, c_order_id, description,
+        isapproved, istransferred, isprinted, salesrep_id, dateinvoiced, dateprinted, dateacct, c_bpartner_id,
+        c_bpartner_location_id, poreference, isdiscountprinted, dateordered, c_currency_id, paymentrule,
+        c_paymentterm_id, c_charge_id, chargeamt, totallines, grandtotal, m_pricelist_id, istaxincluded, c_campaign_id,
+        c_project_id, c_activity_id, ispaid, c_payment_id, c_cashline_id, createfrom, generateto, sendemail, ad_user_id,
+        copyfrom, isselfservice, ad_orgtrx_id, user1_id, user2_id, c_conversiontype_id, ispayschedulevalid,
+        ref_invoice_id, isindispute, invoicecollectiontype, m_rma_id, dunninggrace, c_dunninglevel_id, reversal_id,
+        processedon, isfixedassetinvoice, c_pos_id, user3_id, user4_id, uuid
+        FROM
+        "adempiere".c_invoice
+        <trim prefix="WHERE" prefixOverrides="AND |OR ">
+            <if test="documentNo != null and documentNo != ''">
+                AND DocumentNo = #{documentNo, jdbcType = VARCHAR}
+            </if>
+            <if test="orderId != null and orderId != ''">
+                AND c_order_id = #{orderId, jdbcType = INTEGER}
+            </if>
+            <if test="client != null and client != ''">
+                AND AD_Client_ID = #{client, jdbcType = VARCHAR}
+            </if>
+        </trim>
+    </select>
+
+    <insert id="save">
+        insert into "adempiere".c_invoice (c_invoice_id, ad_client_id, ad_org_id, isactive, created, createdby, updated, updatedby, issotrx, documentno,
+        docstatus, docaction, processing, processed, posted, c_doctype_id, c_doctypetarget_id, c_order_id, description,
+        isapproved, istransferred, isprinted, salesrep_id, dateinvoiced, dateprinted, dateacct, c_bpartner_id,
+        c_bpartner_location_id, poreference, isdiscountprinted, dateordered, c_currency_id, paymentrule,
+        c_paymentterm_id, c_charge_id, chargeamt, totallines, grandtotal, m_pricelist_id, istaxincluded, c_campaign_id,
+        c_project_id, c_activity_id, ispaid, c_payment_id, c_cashline_id, createfrom, generateto, sendemail, ad_user_id,
+        copyfrom, isselfservice, ad_orgtrx_id, user1_id, user2_id, c_conversiontype_id, ispayschedulevalid,
+        ref_invoice_id, isindispute, invoicecollectiontype, m_rma_id, dunninggrace, c_dunninglevel_id, reversal_id,
+        processedon, isfixedassetinvoice, c_pos_id, user3_id, user4_id, uuid)
+        values (#{orderId},#{client},#{organization},#{orderDate},#{documentNo},#{OrderReference},#{description},#{selfService},#{dateInvoiced},
+        #{dateAccount},#{businessPartner},#{partnerLocation},#{userOrContact},#{priceList},#{currency},#{discountPrinted},#{charge},
+        #{chargeAmount},#{project},#{activity},#{campaign},#{trxOrganization},#{totalLines},#{grandTotal},#{documentType},
+        #{payScheduleValid},#{isDispute},#{processInvoice},#{posted},#{paid})
+    </insert>
+
+    <update id="update">
+        update "adempiere".c_invoice set
+        c_order_ido = #{orderId},
+        AD_User_ID = #{userOrContact},
+        M_PriceList_ID = #{priceList},
+        IsDiscountPrinted = #{discountPrinted},
+        TotalLines = #{totalLines}
+        GrandTotal = #{grandTotal}
+        IsPayScheduleValid = #{payScheduleValid}
+        Posted = #{posted}
+        paid = #{paid}
+        where c_invoice_id = #{invoiceId}
+    </update>
+
+    <delete id="delete">
+        delete from "adempiere".c_invoice where c_invoice_id = #{invoiceId}
+    </delete>
+
+    <!--    <insert id="saveUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id"
+                parameterType="com.wangmin.myspringboot.thymeleaf.domain.User">
+            INSERT INTO "public".user
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="name != null">
+                    name,
+                </if>
+                <if test="age != null">
+                    age,
+                </if>
+            </trim>
+            <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="name != null">
+                    #{name},
+                </if>
+                <if test="age != null">
+                    #{age},
+                </if>
+            </trim>
+        </insert>
+
+        <update id="updateUser">
+            UPDATE user
+            <set>
+                <if test="name != null">
+                    name = #{name, jdbcType=VARCHAR},
+                </if>
+                <if test="age != null">
+                    age = #{age, jdbcType=INTEGER},
+                </if>
+            </set>
+            WHERE id = #{id}
+        </update>
+
+        <delete id="deleteUser">
+            DELETE FROM user
+            WHERE id = #{id}
+        </delete>
+
+        <select id="listUser" resultMap="user">
+            SELECT
+                id,
+                name,
+                age
+            FROM user
+        </select>-->
+
+</mapper>
