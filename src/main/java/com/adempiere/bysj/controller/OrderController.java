@@ -5,7 +5,10 @@ import com.adempiere.bysj.domain.User;
 import com.adempiere.bysj.service.SalesOrderService;
 import com.adempiere.bysj.tools.HandleSession;
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +26,7 @@ public class OrderController {
     @Resource
     private SalesOrderService salesOrderService;
 
-    @RequestMapping(value = "/save")
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public Long save(@RequestParam SalesOrderDO salesOrderDO, HttpSession session) {
         if (session.getAttribute(HandleSession.getUsername()) == null) {
             return null;
@@ -46,6 +49,9 @@ public class OrderController {
     public Long delete(@RequestParam Integer invoiceId, HttpSession session) {
         if (session.getAttribute(HandleSession.getUsername()) == null) {
             return null;
+        }
+        if (invoiceId == null) {
+            return -1L;
         }
         return salesOrderService.delete(invoiceId);
     }

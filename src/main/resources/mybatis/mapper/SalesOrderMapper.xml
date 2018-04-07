@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adempiere.bysj.mapper.SalesOrderRepository">
     <resultMap id="salesOrderDo" type="com.adempiere.bysj.domain.SalesOrderDO">
-        <id column="c_order_id" property="orderId"/>
-        <id column="DocumentNo" property="documentNo"/>
+        <id column="c_order_id" property="orderId" javaType="double" jdbcType="NUMERIC"/>
+        <result column="DocumentNo" property="documentNo"/>
         <result column="AD_Client_ID" property="client"/>
         <result column="AD_Org_ID" property="organization"/>
         <result column="POReference" property="OrderReference"/>
@@ -27,7 +27,7 @@
         <result column="DeliveryViaRule" property="deliveryVia"/>
         <result column="M_Shipper_ID" property="shipper"/>
         <result column="FreightCostRule" property="freightCostRule"/>
-        <result column="FreightAmt" property="FreightAmt"/>
+        <result column="FreightAmt" property="freightAmt"/>
         <!--<result column="invoiceRule" property="invoiceRule"/>-->
         <result column="M_PriceList_ID" property="priceList"/>
         <result column="C_Currency_ID" property="currency"/>
@@ -76,7 +76,7 @@
     <!--age-->
     <!--</sql>-->
 
-    <select id="query" resultType="com.adempiere.bysj.domain.SalesOrderDO" parameterType="String">
+    <select id="query" resultMap="salesOrderDo">
         SELECT
         <!--<include refid="baseColumn"/>-->
         c_order_id, AD_Client_ID, AD_Org_ID, DocumentNo, POReference, description, IsSelfService, DateOrdered,

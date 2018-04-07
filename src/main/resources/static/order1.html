@@ -130,7 +130,7 @@
 <!-- Placed at the end of the document so the pages load faster -->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script>window.jQuery || document.write('<script src="docs/assets/js/vendor/jquery.min.js"><\/script>')</script>
 <script src="docs/dist/js/bootstrap.min.js"></script>
 <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
 <script src="docs/assets/js/vendor/holder.min.js"></script>
@@ -187,10 +187,10 @@
                         , "<td>", item.totalLines, "</td>"
                         , "<td>", item.grandTotal, "</td>"
                         , "<td>", item.orderType, "</td>"
-                        , "<td>", "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" onclick=\"return get_edit_info(item.orderId)\" data-target=\"#addUserModal\">编辑</button>",
-                        "&nbsp;|&nbsp;", "<button type=\"button\" class=\"btn btn-danger\" onclick=\"return delete_info({item.orderId})\">删除</button>", "</td>"
-                        , "</tr>"
-                    )
+                        , "<td>", "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" onclick=\"return get_edit_info(" + item.orderId + ")\" data-target=\"#addUserModal\">编辑</button>",
+                        "&nbsp;|&nbsp;", "<button type=\"button\" class=\"btn btn-danger\" onclick=\"delete_info(" + item.orderId + ")\">删除</button>",
+                        "&nbsp;|&nbsp;", "<button type=\"button\" class=\"btn btn-danger\" onclick=\"get_barcode(" + item.orderId + ")\">查看条形码</button>", "</td>"
+                        , "</tr>")
                 });
                 tbody.innerHTML = str;
             }
@@ -252,10 +252,10 @@
                         , "<td>", item.totalLines, "</td>"
                         , "<td>", item.grandTotal, "</td>"
                         , "<td>", item.orderType, "</td>"
-                        , "<td>", "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" onclick=\"return get_edit_info(1)\" data-target=\"#addUserModal\">编辑</button>",
-                        "&nbsp;&nbsp;", "<button type=\"button\" class=\"btn btn-danger\" onclick=\"return delete_info(1)\">删除</button>", "</td>"
-                        , "</tr>"
-                    )
+                        , "<td>", "<button type=\"button\" class=\"btn btn-info\" data-toggle=\"modal\" onclick=\"return get_edit_info(" + item.orderId + ")\" data-target=\"#addUserModal\">编辑</button>",
+                        "&nbsp;|&nbsp;", "<button type=\"button\" class=\"btn btn-danger\" onclick=\"delete_info(" + item.orderId + ")\">删除</button>",
+                        "&nbsp;|&nbsp;", "<button type=\"button\" class=\"btn btn-danger\" onclick=\"get_barcode(" + item.orderId + ")\">查看条形码</button>", "</td>"
+                        , "</tr>")
                 });
                 tbody.innerHTML = str;
             }
@@ -274,14 +274,14 @@
     function delete_info(id) {
         if (!id) {
             alert('Error！');
-            return false;
+            // return false;
         }
         // var form_data = new Array();
 
         $.ajax(
             {
-                url: "action/user_action.php",
-                data: {"id": id, "act": "del"},
+                url: "order/delete",
+                data: {"invoiceId": id},
                 type: "post",
                 beforeSend: function () {
                     $("#tip").html("<span style='color:blue'>正在处理...</span>");
@@ -308,7 +308,7 @@
                 }
             });
 
-        return false;
+        // return false;
     }
 
     // 编辑表单
@@ -408,6 +408,51 @@
             });
 
         return false;
+    }
+
+    function get_barcode(id) {
+        if (!id) {
+            alert('条码ID不能为空')
+        }
+        $.ajax({
+            url: "barcode/query",
+            data: {"id": id},
+            // dataType: "json",
+            type: "post",
+            async: false,
+            // beforeSend: function () {
+            //     $("#tip").html("<span style='color:blue'>正在处理...</span>");
+            //     return true;
+            // },
+            success: function (data) {
+                console.log(data);
+                if (data.length > 0) {
+                    // var msg = "查看条形码";
+                    // location.reload();
+                    console.log("查看条形码");
+                    openwin(data);
+                }
+            },
+            error: function () {
+                alert('请求出错')
+            },
+            complete: function () {
+                $('#acting_tips').hide();
+            }
+        })
+    }
+
+    function openwin(src) {
+        alert(src);
+        OpenWindow = window.open("", "newwin", ",toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,status=no");
+        //写成一行
+        OpenWindow.document.write("<TITLE>查看图片</TITLE>");
+        OpenWindow.document.write("<BODY BGCOLOR=#ffffff>");
+        //OpenWindow.document.write("<h1>Hello!</h1>");
+        OpenWindow.document.write("<img src='" + src + "' />");
+        OpenWindow.document.write("</BODY>");
+        OpenWindow.document.write("</HTML>");
+        OpenWindow.document.close();
     }
 
     $(function () {

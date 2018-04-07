@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class SalesOrderDO implements Serializable{
     private static final long serialVersionUID = 4939376676138141881L;
-    private Integer orderId;
+    private Double orderId;
     //公司
     private Integer client;
     //部门
@@ -391,11 +391,11 @@ public class SalesOrderDO implements Serializable{
         this.orderType = orderType;
     }
 
-    public Integer getOrderId() {
+    public Double getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(Integer orderId) {
+    public void setOrderId(Double orderId) {
         this.orderId = orderId;
     }
 }
