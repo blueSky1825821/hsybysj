@@ -71,6 +71,8 @@ public class InvoiceDO implements Serializable{
     //已付费
     private String paid;
 
+    private String outTradeNo;
+
     public Integer getOrderId() {
         return orderId;
     }
@@ -317,5 +319,13 @@ public class InvoiceDO implements Serializable{
 
     public void setDiscountPrinted(String discountPrinted) {
         this.discountPrinted = discountPrinted;
+    }
+
+    public String getOutTradeNo() {
+        return outTradeNo;
+    }
+
+    public void setOutTradeNo(String outTradeNo) {
+        this.outTradeNo = outTradeNo;
     }
 }

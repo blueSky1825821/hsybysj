@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adempiere.bysj.mapper.InvoiceRepository">
-    <resultMap id="Do" type="com.adempiere.bysj.domain.InvoiceDO">
+    <resultMap id="invoiceDo" type="com.adempiere.bysj.domain.InvoiceDO">
         <id column="c_order_id" property="orderId"/>
         <result column="AD_Client_ID" property="client"/>
         <result column="AD_Org_ID" property="organization"/>
@@ -35,6 +35,7 @@
         <result column="DocAction" property="processInvoice"/>
         <result column="Posted" property="posted"/>
         <result column="paid" property="paid"/>
+        <result column="out_trade_no" property="outTradeNo"/>
     </resultMap>
 
     <!--可被重复使用的代码块-->
@@ -44,7 +45,7 @@
     <!--age-->
     <!--</sql>-->
 
-    <select id="query" resultType="com.adempiere.bysj.domain.InvoiceDO">
+    <select id="query" resultMap="invoiceDo">
         SELECT
         <!--<include refid="baseColumn"/>-->
         c_invoice_id, ad_client_id, ad_org_id, isactive, created, createdby, updated, updatedby, issotrx, documentno,
@@ -71,20 +72,11 @@
         </trim>
     </select>
 
-    <insert id="save">
-        insert into "adempiere".c_invoice (c_invoice_id, ad_client_id, ad_org_id, isactive, created, createdby, updated, updatedby, issotrx, documentno,
-        docstatus, docaction, processing, processed, posted, c_doctype_id, c_doctypetarget_id, c_order_id, description,
-        isapproved, istransferred, isprinted, salesrep_id, dateinvoiced, dateprinted, dateacct, c_bpartner_id,
-        c_bpartner_location_id, poreference, isdiscountprinted, dateordered, c_currency_id, paymentrule,
-        c_paymentterm_id, c_charge_id, chargeamt, totallines, grandtotal, m_pricelist_id, istaxincluded, c_campaign_id,
-        c_project_id, c_activity_id, ispaid, c_payment_id, c_cashline_id, createfrom, generateto, sendemail, ad_user_id,
-        copyfrom, isselfservice, ad_orgtrx_id, user1_id, user2_id, c_conversiontype_id, ispayschedulevalid,
-        ref_invoice_id, isindispute, invoicecollectiontype, m_rma_id, dunninggrace, c_dunninglevel_id, reversal_id,
-        processedon, isfixedassetinvoice, c_pos_id, user3_id, user4_id, uuid)
-        values (#{orderId},#{client},#{organization},#{orderDate},#{documentNo},#{OrderReference},#{description},#{selfService},#{dateInvoiced},
-        #{dateAccount},#{businessPartner},#{partnerLocation},#{userOrContact},#{priceList},#{currency},#{discountPrinted},#{charge},
-        #{chargeAmount},#{project},#{activity},#{campaign},#{trxOrganization},#{totalLines},#{grandTotal},#{documentType},
-        #{payScheduleValid},#{isDispute},#{processInvoice},#{posted},#{paid})
+    <insert id="save" parameterType="com.adempiere.bysj.domain.InvoiceDO">
+        insert into "adempiere".c_invoice
+        (c_invoice_id, c_order_id, ad_client_id, ad_org_id, created, documentno, description, isselfservice,c_bpartner_id,c_bpartner_location_id,ad_user_id,m_pricelist_id,c_currency_id, isdiscountprinted,chargeamt, totallines,grandtotal)
+        values
+        (#{invoiceId}, #{orderId},#{client},#{organization},#{orderDate},#{documentNo},#{description},#{selfService},#{businessPartner},#{partnerLocation},#{userOrContact},#{priceList},#{currency},#{discountPrinted}, #{chargeAmount},#{totalLines},#{grandTotal})
     </insert>
 
     <update id="update">

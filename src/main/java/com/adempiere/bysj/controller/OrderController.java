@@ -42,7 +42,7 @@ public class OrderController {
         if (session.getAttribute(HandleSession.getUsername()) == null) {
             return null;
         }
-        return salesOrderService.query(documentNo, client, orderId);
+        return salesOrderService.query(documentNo, client, orderId, null);
     }
 
     @RequestMapping(value = "/delete")

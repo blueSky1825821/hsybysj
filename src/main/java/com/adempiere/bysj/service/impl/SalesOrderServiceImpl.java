@@ -18,6 +18,11 @@ public class SalesOrderServiceImpl implements SalesOrderService{
     private SalesOrderRepository salesOrderRepository;
 
     @Override
+    public SalesOrderDO queryByPrimaryKey(Integer orderId) {
+        return salesOrderRepository.queryByPrimaryKey(orderId);
+    }
+
+    @Override
     public Long delete(Integer orderId) {
         return salesOrderRepository.delete(orderId);
     }
@@ -33,7 +38,14 @@ public class SalesOrderServiceImpl implements SalesOrderService{
     }
 
     @Override
-    public List<SalesOrderDO> query(String documentNo, String client, Integer orderId) {
-        return salesOrderRepository.query(documentNo, client, orderId);
+    public Long updateOutTransNoByOrderId(Double orderId, String outTradeNo) {
+        return salesOrderRepository.updateOutTransNoByOrderId(orderId, outTradeNo);
     }
+
+    @Override
+    public List<SalesOrderDO> query(String documentNo, String client, Integer orderId, String outTradeNo) {
+        return salesOrderRepository.query(documentNo, client, orderId, outTradeNo);
+    }
+
+
 }

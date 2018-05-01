@@ -4,6 +4,7 @@ import com.adempiere.bysj.domain.SalesOrderDO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -11,11 +12,15 @@ import java.util.List;
  */
 @Mapper
 public interface SalesOrderRepository {
-    Long delete(@Param("invoiceId") Integer orderId);
+    SalesOrderDO queryByPrimaryKey(@Param("orderId") Integer orderId);
 
-    Long update(@Param("invoiceDO") SalesOrderDO salesOrderDO);
+    Long delete(@Param("orderId") Integer orderId);
+
+    Long update(SalesOrderDO salesOrderDO);
+
+    Long updateOutTransNoByOrderId(@Param("orderId") Double orderId, @Param("outTradeNo") String outTradeNo);
 
     Long save(@Param("salesOrderDO") SalesOrderDO salesOrderDO);
 
-    List<SalesOrderDO> query(@Param("documentNo") String documentNo, @Param("client") String client, @Param("orderId") Integer orderId);
+    List<SalesOrderDO> query(@Param("documentNo") String documentNo, @Param("client") String client, @Param("orderId") Integer orderId, @Param("outTradeNo") String outTradeNo);
 }

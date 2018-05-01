@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Mapper
 public interface InvoiceRepository {
-    Long save(@Param("invoiceDO") InvoiceDO invoiceDO);
+    Long save(InvoiceDO invoiceDO);
 
     Long delete(@Param("invoiceId") Integer invoiceId);
 

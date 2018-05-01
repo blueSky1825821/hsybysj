@@ -52,6 +52,7 @@
         <!--<result column="processOrder" property="processOrder"/>-->
         <!--<result column="posted" property="posted"/>-->
         <result column="OrderType" property="orderType"/>
+        <result column="out_trade_no" property="outTradeNo"/>
     </resultMap>
 
     <insert id="save">
@@ -97,19 +98,47 @@
             <if test="client != null and client != ''">
                 AND AD_Client_ID = #{client, jdbcType = VARCHAR}
             </if>
+            <if test="outTradeNo != null and outTradeNo != ''">
+                AND out_trade_no = #{outTradeNo, jdbcType = VARCHAR}
+            </if>
         </trim>
     </select>
 
+    <select id="queryByPrimaryKey" resultMap="salesOrderDo">
+        SELECT c_order_id, AD_Client_ID, AD_Org_ID, DocumentNo, POReference, description, IsSelfService, DateOrdered,
+        DatePromised, C_BPartner_ID, Bill_BPartner_ID, C_BPartner_Location_ID, Bill_Location_ID, AD_User_ID,
+        Bill_User_ID, DeliveryRule, PriorityRule, M_Warehouse_ID, IsDropShip, DeliveryViaRule, M_Shipper_ID,
+        FreightCostRule, FreightAmt, M_PriceList_ID, C_Currency_ID, C_ConversionType_ID, IsDiscountPrinted, C_Charge_ID,
+        ChargeAmt, paymentRule, C_PaymentTerm_ID, C_Project_ID, C_Activity_ID, C_Campaign_ID, AD_OrgTrx_ID, TotalLines,
+        GrandTotal, OrderType
+        FROM
+        "adempiere".c_order
+        WHERE
+        c_order_id = #{orderId, jdbcType = INTEGER}
+    </select>
 
-    <update id="update">
-        update "adempiere".c_order set
-        c_order_ido = #{orderId},
-        AD_User_ID = #{userOrContact},
-        M_PriceList_ID = #{priceList},
-        IsDiscountPrinted = #{discountPrinted},
-        TotalLines = #{totalLines}
-        GrandTotal = #{grandTotal}
-        where c_order_id = #{orderId}
+
+    <update id="update" parameterType="com.adempiere.bysj.domain.SalesOrderDO">
+        update "adempiere".c_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userOrContact != null">AD_User_ID=#{userOrContact},</if>
+            <if test="priceList != null">M_PriceList_ID=#{priceList},</if>
+            <if test="discountPrinted != null">IsDiscountPrinted=#{discountPrinted},</if>
+            <if test="totalLines != null">TotalLines=#{totalLines},</if>
+            <if test="grandTotal != null">GrandTotal=#{grandTotal},</if>
+            <if test="outTradeNo != null">out_trade_no=#{outTradeNo}</if>
+        </trim>
+        where
+        c_order_id = #{orderId}
+    </update>
+
+    <update id="updateOutTransNoByOrderId">
+        update "adempiere".c_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="outTradeNo != null">out_trade_no=#{outTradeNo}</if>
+        </trim>
+        where
+        c_order_id = #{orderId, jdbcType = INTEGER}
     </update>
 
     <delete id="delete">

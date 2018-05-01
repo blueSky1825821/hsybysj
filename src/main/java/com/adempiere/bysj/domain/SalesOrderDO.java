@@ -23,7 +23,7 @@ public class SalesOrderDO implements Serializable{
 
 //    private Integer targetDocumentType;
     //自助服务
-    private Boolean selfService;
+    private String selfService;
     //下单时间
     private Date dateOrdered;
     //答应交货时间
@@ -64,7 +64,7 @@ public class SalesOrderDO implements Serializable{
     private Integer currencyType;
 //    private Integer salesRepresentative;
     //打印
-    private Boolean discountPrinted;
+    private String discountPrinted;
     //费用类型
     private Integer charge;
     //费用金额
@@ -94,6 +94,8 @@ public class SalesOrderDO implements Serializable{
 //    private String posted;
     //订单类型
     private String orderType;
+
+    private String outTradeNo;
 
     public Integer getClient() {
         return client;
@@ -135,11 +137,11 @@ public class SalesOrderDO implements Serializable{
         this.description = description;
     }
 
-    public Boolean getSelfService() {
+    public String getSelfService() {
         return selfService;
     }
 
-    public void setSelfService(Boolean selfService) {
+    public void setSelfService(String selfService) {
         this.selfService = selfService;
     }
 
@@ -295,11 +297,11 @@ public class SalesOrderDO implements Serializable{
         this.currencyType = currencyType;
     }
 
-    public Boolean getDiscountPrinted() {
+    public String getDiscountPrinted() {
         return discountPrinted;
     }
 
-    public void setDiscountPrinted(Boolean discountPrinted) {
+    public void setDiscountPrinted(String discountPrinted) {
         this.discountPrinted = discountPrinted;
     }
 
@@ -397,5 +399,13 @@ public class SalesOrderDO implements Serializable{
 
     public void setOrderId(Double orderId) {
         this.orderId = orderId;
+    }
+
+    public String getOutTradeNo() {
+        return outTradeNo;
+    }
+
+    public void setOutTradeNo(String outTradeNo) {
+        this.outTradeNo = outTradeNo;
     }
 }
